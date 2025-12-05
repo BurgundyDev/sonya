@@ -43,6 +43,10 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
         set(SUBSYSTEM_LINKER_OPTIONS "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
     elseif(MINGW)
         set(SUBSYSTEM_LINKER_OPTIONS "-mwindows")
+        target_link_options(sonya PUBLIC
+            "-static-libgcc"
+            "-static-libstdc++"
+        )
     endif()
     target_link_options(sonya PRIVATE ${SUBSYSTEM_LINKER_OPTIONS})
 endif()
