@@ -34,7 +34,9 @@ int main(int argc, char** argv) {
 
     SDL_DestroyWindow(window);
     SDL_Quit();
+#if SONYA_LINUX
     setenv("SDL_VIDEODRIVER", env, 1);
+#endif
 
     return 0;
 }
