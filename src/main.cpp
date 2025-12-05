@@ -17,12 +17,14 @@ int main(int argc, char** argv) {
 
     SonyaUtils::makeWindowClickThrough(window);
 
-    SDL_Event e;
+    SDL_Event event;
     bool quit = false;
     while (!quit){
-        while (SDL_PollEvent(&e)){
-            if (e.type == SDL_EVENT_QUIT){
-                quit = true;
+        while (SDL_PollEvent(&event)){
+            if (event.type == SDL_EVENT_KEY_DOWN){
+                if (event.key.key == SDLK_ESCAPE) {
+                    quit = true;
+                }
             }
         }
 
@@ -35,7 +37,11 @@ int main(int argc, char** argv) {
     SDL_DestroyWindow(window);
     SDL_Quit();
 #if SONYA_LINUX
-    setenv("SDL_VIDEODRIVER", env, 1);
+    if (env != nullptr) {
+        setenv("SDL_VIDEODRIVER", env, 1);
+    } else {
+        setenv("SDL_VIDEODRIVER", "", 1);
+    }
 #endif
 
     return 0;
