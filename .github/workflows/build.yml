@@ -44,6 +44,28 @@ jobs:
           generator: Ninja
           options: '-DCMAKE_BUILD_TYPE=${{ matrix.build_type }}'
 
+      - name: Copy dependency libraries
+        shell: bash
+        run: |
+          if [ "${{ runner.os }}" == "Windows" ]; then
+            find build/_deps -name "*.dll" -exec cp {} build/ \;
+          else
+            find build/_deps -name "*.a*" -exec cp {} build/ \;
+            find build/_deps -name "*.so*" -exec cp {} build/ \;
+          fi
+
+      - name: Clean build directory
+        shell: bash
+        run: |
+          cd build
+          if [ "${{ runner.os }}" == "Windows" ]; then
+            find . -mindepth 1 ! -name "sonya.exe" ! -name "*.dll" -exec rm -rf {} + 2>/dev/null || true
+          else
+            find . -mindepth 1 ! -name "sonya" ! -name "*.so*" ! -name "*.a*" -type f -delete 2>/dev/null || true
+            find . -mindepth 1 -type d -empty -delete 2>/dev/null || true
+            find . -mindepth 1 -type d ! -name "." -exec rm -rf {} + 2>/dev/null || true
+          fi
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
