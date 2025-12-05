@@ -29,7 +29,6 @@ jobs:
             build-essential \
             cmake \
             ninja-build \
-            libsdl3-dev \
             libx11-dev \
             libxfixes-dev \
             libxext-dev
@@ -39,20 +38,11 @@ jobs:
         run: |
           choco install ninja
 
-      - name: Configure CMake (Linux)
-        if: runner.os == 'Linux'
-        run: |
-          cmake -B build -G Ninja \
-            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
-
-      - name: Configure CMake (Windows)
-        if: runner.os == 'Windows'
-        run: |
-          cmake -B build -G Ninja `
-            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
-
       - name: Build
-        run: cmake --build build --config ${{ matrix.build_type }}
+        uses: threeal/cmake-action@v2.1.0
+        with:
+          generator: Ninja
+          options: '-DCMAKE_BUILD_TYPE=${{ matrix.build_type }}'
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
