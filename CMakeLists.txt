@@ -19,12 +19,18 @@ CPMAddPackage(
 )
 
 CPMAddPackage(
+    NAME SDL3_image
+    GITHUB_REPOSITORY libsdl-org/SDL_image
+    GIT_TAG release-3.2.4
+)
+
+CPMAddPackage(
     NAME fmt
     GITHUB_REPOSITORY fmtlib/fmt
     GIT_TAG 12.1.0
 )
 
-target_link_libraries(sonya SDL3::SDL3 fmt::fmt)
+target_link_libraries(sonya SDL3::SDL3 SDL3_image::SDL3_image fmt::fmt)
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     target_link_libraries(sonya X11)
@@ -38,9 +44,15 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
     else()
         set(SUBSYSTEM_LINKER_OPTIONS "-mwindows")
     endif()
-    target_link_options(TargetName PRIVATE ${SUBSYSTEM_LINKER_OPTIONS})
+    target_link_options(sonya PRIVATE ${SUBSYSTEM_LINKER_OPTIONS})
 endif()
 if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     message("macOS is currently unsupported in sonya. You are on your own.")
     target_compile_definitions(sonya PUBLIC "SONYA_MACOS")
+endif()
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+    target_compile_definitions(sonya PUBLIC "SONYA_DEBUG")
+elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
+    target_compile_definitions(sonya PUBLIC "SONYA_RELEASE")
 endif()
