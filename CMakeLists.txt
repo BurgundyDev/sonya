@@ -19,9 +19,9 @@ CPMAddPackage(
 )
 
 CPMAddPackage(
-        NAME fmt
-        GITHUB_REPOSITORY fmtlib/fmt
-        GIT_TAG 12.1.0
+    NAME fmt
+    GITHUB_REPOSITORY fmtlib/fmt
+    GIT_TAG 12.1.0
 )
 
 target_link_libraries(sonya SDL3::SDL3 fmt::fmt)
@@ -33,6 +33,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
 endif()
 if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
     target_compile_definitions(sonya PUBLIC "SONYA_WINDOWS")
+    target_link_options(sonya "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
 endif()
 if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     message("macOS is currently unsupported in sonya. You are on your own.")
