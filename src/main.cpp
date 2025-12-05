@@ -4,7 +4,6 @@
 #include <fmt/base.h>
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
-#include <SDL3/SDL_hints.h>
 #include "sonya_utils.h"
 
 enum move_type {
@@ -19,27 +18,30 @@ int main(int argc, char** argv) {
 #endif
 
     SDL_Init(SDL_INIT_VIDEO);
-    SDL_DisplayMode current_display;
-    SDL_Window* main_window = SDL_CreateWindow("test", 32, 64, SDL_WINDOW_ALWAYS_ON_TOP | SDL_WINDOW_BORDERLESS | SDL_WINDOW_TRANSPARENT);
-
+    SDL_Window* main_window = SDL_CreateWindow("sonya", 144, 96, SDL_WINDOW_ALWAYS_ON_TOP | SDL_WINDOW_BORDERLESS | SDL_WINDOW_TRANSPARENT);
+    SDL_DisplayID current_display = SDL_GetDisplayForWindow(main_window);
+    auto *display_bounds = new SDL_Rect;
+    SDL_GetDisplayBounds(current_display, display_bounds);
     SDL_Renderer* renderer = SDL_CreateRenderer(main_window, nullptr);
     SDL_Surface * image = IMG_Load("spritesheet.png");
     SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer, image);
+    SDL_SetTextureScaleMode(texture, SDL_SCALEMODE_NEAREST);
 
     SonyaUtils::makeWindowClickThrough(main_window);
 
-    float Y_POSITION = 780;
+    int Y_POSITION = display_bounds->h;
     int MOVEMENT_DELAY = 1000;
-    int MOVEMENT_SPEED = 3;
-    std::vector<move_type> moves = { MOVE, MOVE, MOVE, MOVE };
+    int MOVEMENT_SPEED = 16;
+    std::vector<move_type> moves = { SHIFT, MOVE };
     int current_move = 0;
     int curr_time = 0;
     int *prev_x = new int;
     bool moving_forward = true;
+    SDL_SetWindowPosition(main_window, 0, Y_POSITION);
 
-    SDL_FRect srcrect = { 0, 0, 32, 64 };
-    SDL_FRect dstrect = { 0, 0, 32, 64 };
-    int FRAME_COUNT = 4;
+    SDL_FRect srcrect = { 0, 0, 48, 32 };
+    SDL_FRect dstrect = { 0, 0, 96, 64 };
+    int FRAME_COUNT = 2;
 
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 1);
     SDL_RenderClear(renderer);
@@ -78,7 +80,7 @@ int main(int argc, char** argv) {
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 1);
         SDL_RenderClear(renderer);
-        SDL_RenderTexture(renderer, texture, &srcrect, &dstrect);
+        SDL_RenderTextureRotated(renderer, texture, &srcrect, &dstrect, 0, nullptr, moving_forward ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL);
         SDL_RenderPresent(renderer);
         SDL_Delay(0);
     }
