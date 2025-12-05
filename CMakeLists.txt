@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.31)
 project(sonya)
 
-set(CMAKE_CXX_STANDARD 26)
+set(CMAKE_CXX_STANDARD 23)
 
 add_executable(sonya src/main.cpp
         src/win_utils.cpp
@@ -18,7 +18,13 @@ CPMAddPackage(
     GIT_TAG release-3.2.26
 )
 
-target_link_libraries(sonya SDL3::SDL3)
+CPMAddPackage(
+        NAME fmt
+        GITHUB_REPOSITORY fmtlib/fmt
+        GIT_TAG 12.1.0
+)
+
+target_link_libraries(sonya SDL3::SDL3 fmt::fmt)
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     target_link_libraries(sonya X11)

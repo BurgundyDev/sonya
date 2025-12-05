@@ -1,5 +1,6 @@
 #define SDL_MAIN_HANDLED true
-#include <print>
+#include <cstdlib>
+#include <fmt/base.h>
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_hints.h>
 #include "sonya_utils.h"
