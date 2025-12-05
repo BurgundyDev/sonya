@@ -44,8 +44,9 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
     elseif(MINGW)
         set(SUBSYSTEM_LINKER_OPTIONS "-mwindows")
         target_link_options(sonya PUBLIC
-            "-static-libgcc"
-            "-static-libstdc++"
+                -static-libgcc
+                -static-libstdc++
+                -static
         )
     endif()
     target_link_options(sonya PRIVATE ${SUBSYSTEM_LINKER_OPTIONS})
