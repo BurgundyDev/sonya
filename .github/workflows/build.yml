@@ -67,9 +67,7 @@ jobs:
         shell: bash
         run: |
           cd build
-          if [ "${{ runner.os }}" == "Windows" ]; then
-            find . -mindepth 1 ! -name "sonya.exe" ! -name "*.dll" -exec rm -rf {} + 2>/dev/null || true
-          else
+          if [ "${{ runner.os }}" != "Windows" ]; then
             find . -mindepth 1 ! -name "sonya" ! -name "*.so*" ! -name "*.a*" -type f -delete 2>/dev/null || true
             find . -mindepth 1 -type d -empty -delete 2>/dev/null || true
             find . -mindepth 1 -type d ! -name "." -exec rm -rf {} + 2>/dev/null || true
