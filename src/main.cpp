@@ -29,7 +29,7 @@ int main(int argc, char** argv) {
 
     SonyaUtils::makeWindowClickThrough(main_window);
 
-    int Y_POSITION = display_bounds->h;
+    int Y_POSITION = display_bounds->h - 200;
     int MOVEMENT_DELAY = 5000;
     int MOVEMENT_SPEED = 16;
     std::vector<move_type> moves = { SHIFT, MOVE };
