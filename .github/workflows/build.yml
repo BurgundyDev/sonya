@@ -43,14 +43,15 @@ jobs:
         if: runner.os != 'Windows'
         with:
           generator: Ninja
-          options: '-DCMAKE_BUILD_TYPE=${{ matrix.build_type }}'
+          options: 'CMAKE_BUILD_TYPE=${{ matrix.build_type }}'
 
       - name: Build (Windows)
         uses: threeal/cmake-action@v2.1.0
         if: runner.os == 'Windows'
         with:
           generator: Ninja
-          options: '-DCMAKE_BUILD_TYPE=${{ matrix.build_type }}'
+          options: 'CMAKE_BUILD_TYPE=${{ matrix.build_type }}'
+          build-args: '--config ${{ matrix.build_type }}'
 
       - name: Copy dependency libraries
         shell: bash
