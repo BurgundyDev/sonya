@@ -49,7 +49,7 @@ jobs:
         uses: threeal/cmake-action@v2.1.0
         if: runner.os == 'Windows'
         with:
-          generator: Ninja
+          generator: Visual Studio 17 2022
           options: 'CMAKE_BUILD_TYPE=${{ matrix.build_type }}'
           build-args: '--config ${{ matrix.build_type }}'
 
